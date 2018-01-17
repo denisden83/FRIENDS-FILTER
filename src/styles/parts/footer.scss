@@ -1,0 +1,39 @@
+.footer {
+  height: 45px;
+  //border-radius: 0 0 10px 10px;
+  text-align: right;
+  background: $grey-light;
+  padding: 7px;
+  position: relative;
+
+  &__button {
+    border: 1px solid $white;
+    color: $white;
+    background: $orange;
+    padding: 8px 18px;
+    display: inline-block;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 12px;
+    transition: .3s;
+    font-weight: lighter;
+    &-after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+    }
+
+    &:hover {
+      background: $dark-orange;
+      border: 1px solid $red;
+      color: black;
+      font-weight: 500;
+      & + .footer__button-after {
+        border-top: 1px solid $red;
+      }
+    }
+  }
+}

@@ -1,0 +1,149 @@
+.section {
+  height: 400px;
+  @extend %clearfix;
+
+  &__left, &__right {
+    float: left;
+    width: 50%;
+    height: 100%;
+  }
+  &__left {
+    border-right: 1px solid $grey-light;
+  }
+  &__right {
+    border-left: 1px solid $grey-light;
+  }
+}
+//-------------search---------------//
+
+.all__search, .favorite__search {
+  background: $grey-light;
+  height: 45px;
+  padding-top: 13px;
+
+  &-block {
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+  }
+
+  &-icon {
+    position: absolute;
+    top: 4px;
+    left: 5px;
+
+  }
+  &-input {
+    padding: 3px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    color: $black;
+    font-weight: bold;
+    transition: .3s;
+    &::-webkit-input-placeholder {
+      font-weight: normal;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid $red;
+      color: $black;
+      font-weight: bold;
+
+      &::-webkit-input-placeholder {
+        color: $black;
+        font-weight: normal;
+      }
+
+      & + .all__search-icon,
+      & + .favorite__search-icon {
+        //display: none;
+        color: $black;
+      }
+    }
+  }
+}
+//-------------friends---------------//
+
+.all__friends, .favorite__friends {
+  padding: 15px;
+  font-weight: bold;
+
+}
+.all-friends, .favorite-friends {
+  &__title {
+    //text-align: center;
+    padding-bottom: 5px;
+    margin: 0;
+    border-bottom: 1px solid $grey;
+  }
+
+  &__list {
+    overflow: auto;
+    height: 317px;
+    font-size: 12px;
+    &::-webkit-scrollbar-track
+    {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+      background: $white;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar
+    {
+      width: 3px;
+      background: $white;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+      border-radius: 10px;
+      background: $grey;
+    }
+  }
+
+  &__item {
+    @extend %clearfix;
+    height: 50px;
+    padding: 5px;
+    border-bottom:1px solid $grey-light;
+    transition: .3s;
+    &:hover {
+      background: $grey-light;
+    }
+  }
+
+  &__info {
+    float: left;
+    width: 90%;
+    &-avatar {
+      display: inline-block;
+      vertical-align: middle;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 1px solid $grey-light;
+      overflow: hidden;
+    }
+    &-name {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  &__button {
+    width: 10%;
+    float: right;
+    padding: 10px 10px 0 0;
+    font-size: 14px;
+    &-icon {
+      padding: 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+

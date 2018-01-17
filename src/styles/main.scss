@@ -1,4 +1,22 @@
-h1 {
-  color: lime;
-}
-@import "parts/part";
+//------------------------------ test ---------------------------------------//
+
+//------------------------------ variables -----------------------------------//
+$white: #FFFFFF;
+$black: black;
+$orange: #FF8563;
+$dark-orange: #E45128;
+$red: #741900;
+$grey: #4F4F4F;
+$grey-light: #EFEFEF;
+//------------------------------ fonts ---------------------------------------//
+@import 'parts/fontawesome.scss';
+
+//------------------------------ base styles ---------------------------------//
+@import 'parts/mixins';
+@import 'parts/adjustment';
+//------------------------------ parts import --------------------------------//
+@import 'parts/header';
+@import 'parts/sections';
+@import 'parts/footer';
+
+//header

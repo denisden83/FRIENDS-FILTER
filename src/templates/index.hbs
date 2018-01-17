@@ -6,9 +6,90 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{htmlWebpackPlugin.options.title}}</title>
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">-->
 </head>
 <body>
-<h1>Friends Filter</h1>
-<div id="content"></div>
+<div class="wrapper">
+    <div class="container">
+        <div class="logo"><img src="/src/img/logo.png" alt="logo"></div>
+        <div class="container-wrapper">
+
+            <header class="header">
+                <span class="header__title">Выберите друзей</span>
+                <i class="fa fa-close header__close"></i>
+            </header>
+
+            <section class="section">
+                <div class="section__left">
+
+                    <div class="all">
+                        <div class="all__search">
+                            <div class="all__search-block">
+                                <input type="text" class="all__search-input" id="allSearch" placeholder="Начните вводить имя друга">
+                                <i class="fa fa-search all__search-icon"></i>
+                            </div>
+                        </div>
+                        <div class="all__friends">
+
+                            <div class="all-friends">
+                                <p class="all-friends__title">Ваши друзья</p>
+                                <ul class="all-friends__list" id="allFriends">
+                                    <!--<li class="all-friends__item" id="" draggable="true">-->
+                                        <!--<div class="all-friends__info">-->
+                                                <!--<img src="/src/img/user1.jpg" class="all-friends__info-avatar" alt="Friend's Photo">-->
+                                            <!--<span class="all-friends__info-name">Artem Barabanov</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="all-friends__button">-->
+                                            <!--<i class="fa fa-plus"></i>-->
+                                        <!--</div>-->
+                                    <!--</li>-->
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="section__right">
+
+                    <div class="favorite">
+                        <div class="favorite__search">
+                            <div class="favorite__search-block">
+                                <input type="text" class="favorite__search-input" id="favoriteSearch" placeholder="Название">
+                                <i class="fa fa-search favorite__search-icon"></i>
+                            </div>
+                        </div>
+                        <div class="favorite__friends">
+
+                            <div class="favorite-friends">
+                                <p class="favorite-friends__title">Друзья в списке</p>
+                                <ul class="favorite-friends__list" id="favoriteFriends">
+                                    <!--<li class="favorite-friends__item" id="" draggable="true">-->
+                                        <!--<div class="favorite-friends__info">-->
+                                            <!--<img src="/src/img/user1.jpg" class="favorite-friends__info-avatar" alt="Friend's Photo">-->
+                                            <!--<span class="favorite-friends__info-name">Artem Barabanov</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="favorite-friends__button">-->
+                                            <!--<i class="fa fa-close"></i>-->
+                                        <!--</div>-->
+                                    <!--</li>-->
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <footer class="footer">
+                <a href="#" class="footer__button">Сохранить</a>
+                <div class="footer__button-after"></div>
+            </footer>
+
+        </div>
+    </div>
+</div>
+<script src="http://vk.com/js/api/openapi.js" type="text/javascript"></script>
 </body>
 </html>
