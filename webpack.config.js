@@ -39,7 +39,7 @@ module.exports = {
     },
     output: {
         filename: './js/[name].[hash].js',
-        path: path.resolve('dist')
+        path: path.resolve(__dirname, 'dist')
     },
     devtool: 'source-map',
     module: {

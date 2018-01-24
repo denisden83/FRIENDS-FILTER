@@ -42,67 +42,112 @@ function callApi(method, params) {
 (async () => {
     try {
         await auth();
-        let friends = await callApi('friends.get', {fields: 'photo_50'});
+        let [user] = await callApi('users.get', {});
+        let userId = user.id;
+        let {items: allFriendsArr} = await callApi('friends.get', {fields: 'photo_50'});
         let favoriteFriendsArr = [];
+        // let favoriteFriendsId = [];
+
+        let allSearch = document.querySelector('#allSearch');
+        let favoriteSearch = document.querySelector('#favoriteSearch');
+
         let allFriendsUl = document.querySelector('#allFriends');
         let favoriteFriendsUl = document.querySelector('#favoriteFriends');
 
-        allFriendsUl.innerHTML = allFriendsTemplate(friends);
-        addAllFriendsListeners();
-        addAllFriendsDragListeners();
-        addFavoriteFriendsListeners();
-        addFavoriteFriendsDragListeners();
-
-        //---------allSearch--------//
-        let allSearch = document.querySelector('#allSearch');
-
-        allSearch.addEventListener('keyup', () => {
-            let value = allSearch.value;
-
-            if (value === '') {
-                allSearch.style.backgroundColor = 'white';
-                allFriendsUl.innerHTML = allFriendsTemplate(friends);
-                addAllFriendsListeners();
-                addAllFriendsDragListeners();
-            } else {
-                allSearch.style.backgroundColor = '#E45128';
-                let filteredAllFriends = [];
-
-                friends.items.forEach(obj => {
-                    if (isMatching(obj.first_name, value) || isMatching(obj.last_name, value)) {
-                        filteredAllFriends.push(obj);
+        if (localStorage[userId]) {
+            let data = JSON.parse(localStorage[userId] || {});
+            let favoriteFriendsId = data.favoriteFriendsId || [];
+            for (let favoriteFriendId of favoriteFriendsId) {
+                allFriendsArr.forEach((obj, index) => {
+                    if (favoriteFriendId === obj.id) {
+                        favoriteFriendsArr.push(obj);
+                        allFriendsArr.splice(index, 1);
                     }
                 });
-                allFriendsUl.innerHTML = allFriendsTemplate({items: filteredAllFriends});
-                addAllFriendsListeners();
-                addAllFriendsDragListeners();
             }
+            allSearch.value = data.allSearch || '';
+            favoriteSearch.value = data.favoriteSearch || '';
+        }
+
+        allFriendsUl.innerHTML = allFriendsTemplate({items: allFriendsArr});
+        favoriteFriendsUl.innerHTML = favoriteFriendsTemplate({items: favoriteFriendsArr});
+
+        addAllFriendsListeners();
+        addFavoriteFriendsListeners();
+
+        addAllFriendsDragListeners();
+        addFavoriteFriendsDragListeners();
+
+        addAllSearchListener();
+        addFavoriteSearchListener();
+
+        allSearch.dispatchEvent(new Event('keyup'));
+        favoriteSearch.dispatchEvent(new Event('keyup'));
+
+        //---------saveButton--------//
+        const saveButton = document.querySelector('.footer__button');
+        saveButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            let favoriteFriendsId = favoriteFriendsArr.map(obj => obj.id);
+            localStorage[userId] = JSON.stringify({
+                favoriteFriendsId: favoriteFriendsId,
+                allSearch: allSearch.value,
+                favoriteSearch: favoriteSearch.value
+            });
+            console.log(localStorage[userId]);
         });
+        //---------allSearch--------//
+        function addAllSearchListener() {
+            allSearch.addEventListener('keyup', () => {
+                let value = allSearch.value;
+
+                if (value === '') {
+                    allSearch.style.backgroundColor = 'white';
+                    allFriendsUl.innerHTML = allFriendsTemplate({items: allFriendsArr});
+                    addAllFriendsListeners();
+                    addAllFriendsDragListeners();
+                } else {
+                    allSearch.style.backgroundColor = '#E45128';
+                    let filteredAllFriends = [];
+
+                    allFriendsArr.forEach(obj => {
+                        if (isMatching(obj.first_name, value) || isMatching(obj.last_name, value)) {
+                            filteredAllFriends.push(obj);
+                        }
+                    });
+                    allFriendsUl.innerHTML = allFriendsTemplate({items: filteredAllFriends});
+                    addAllFriendsListeners();
+                    addAllFriendsDragListeners();
+                }
+            });
+        }
+
         //-------favoriteSearch-------//
-        let favoriteSearch = document.querySelector('#favoriteSearch');
+        function addFavoriteSearchListener() {
+            favoriteSearch.addEventListener('keyup', () => {
 
-        favoriteSearch.addEventListener('keyup', () => {
+                let value = favoriteSearch.value;
+                if (value === '') {
+                    favoriteSearch.style.backgroundColor = 'white';
+                    favoriteFriendsUl.innerHTML = favoriteFriendsTemplate({items: favoriteFriendsArr});
+                    addFavoriteFriendsListeners();
+                    addFavoriteFriendsDragListeners();
+                } else {
+                    favoriteSearch.style.backgroundColor = '#E45128';
+                    let filteredFavoriteFriends = [];
 
-            let value = favoriteSearch.value;
-            if (value === '') {
-                favoriteSearch.style.backgroundColor = 'white';
-                favoriteFriendsUl.innerHTML = favoriteFriendsTemplate({items: favoriteFriendsArr});
-                addFavoriteFriendsListeners();
-                addFavoriteFriendsDragListeners();
-            } else {
-                favoriteSearch.style.backgroundColor = '#E45128';
-                let filteredFavoriteFriends = [];
+                    favoriteFriendsArr.forEach(obj => {
+                        if (isMatching(obj.first_name, value) || isMatching(obj.last_name, value)) {
+                            filteredFavoriteFriends.push(obj);
+                        }
+                    });
+                    favoriteFriendsUl.innerHTML = favoriteFriendsTemplate({items: filteredFavoriteFriends});
+                    addFavoriteFriendsListeners();
+                    addFavoriteFriendsDragListeners();
+                }
+            });
+        }
 
-                favoriteFriendsArr.forEach(obj => {
-                   if (isMatching(obj.first_name, value) || isMatching(obj.last_name, value)) {
-                       filteredFavoriteFriends.push(obj);
-                   }
-                });
-                favoriteFriendsUl.innerHTML = favoriteFriendsTemplate({items: filteredFavoriteFriends});
-                addFavoriteFriendsListeners();
-                addFavoriteFriendsDragListeners();
-            }
-        });
         //-------dragToFavorite------//
         function addAllFriendsDragListeners() {
             let allFriendsItems = document.querySelectorAll('.all-friends__item');
@@ -124,11 +169,11 @@ function callApi(method, params) {
                 let draggableItem = document.getElementById(draggableItemId);
 
                 if (draggableItem.classList.contains('all-friends__item')) {
-                    friends.items.forEach((obj, index) => {
-                       if (obj.id == draggableItemId) {
+                    allFriendsArr.forEach((obj, index) => {
+                       if (obj.id === Number(draggableItemId)) {
                            favoriteFriendsArr.unshift(obj);
                            draggableItem.remove();
-                           friends.items.splice(index, 1);
+                           allFriendsArr.splice(index, 1);
                        }
                     });
                     favoriteFriendsUl.innerHTML = favoriteFriendsTemplate({items: favoriteFriendsArr});
@@ -162,13 +207,13 @@ function callApi(method, params) {
 
                 if (draggableItem.classList.contains('favorite-friends__item')) {
                     favoriteFriendsArr.forEach((obj, index) => {
-                        if (obj.id == draggableItemId) {
-                            friends.items.unshift(obj);
+                        if (obj.id === Number(draggableItemId)) {
+                            allFriendsArr.unshift(obj);
                             draggableItem.remove();
                             favoriteFriendsArr.splice(index, 1);
                         }
                     });
-                    allFriendsUl.innerHTML = allFriendsTemplate(friends);
+                    allFriendsUl.innerHTML = allFriendsTemplate({items: allFriendsArr});
                     addAllFriendsListeners();
                     addAllFriendsDragListeners();
                     allSearch.dispatchEvent(new Event('keyup'));
@@ -187,11 +232,11 @@ function callApi(method, params) {
                     let item = e.currentTarget;
 
                     if (e.target.classList.contains('all-friends__button-icon')) {
-                        friends.items.forEach((obj, index) => {
-                            if (obj.id == item.id) {
+                        allFriendsArr.forEach((obj, index) => {
+                            if (obj.id === Number(item.id)) {
                                 favoriteFriendsArr.unshift(obj);
                                 item.remove();
-                                friends.items.splice(index, 1);
+                                allFriendsArr.splice(index, 1);
                             }
                         });
                         favoriteFriendsUl.innerHTML = favoriteFriendsTemplate({items: favoriteFriendsArr});
@@ -212,13 +257,13 @@ function callApi(method, params) {
 
                     if (e.target.classList.contains('favorite-friends__button-icon')) {
                         favoriteFriendsArr.forEach((obj, index) => {
-                            if (obj.id == item.id) {
-                                friends.items.unshift(obj);
+                            if (obj.id === Number(item.id)) {
+                                allFriendsArr.unshift(obj);
                                 item.remove();
                                 favoriteFriendsArr.splice(index, 1);
                             }
                         });
-                        allFriendsUl.innerHTML = allFriendsTemplate(friends);
+                        allFriendsUl.innerHTML = allFriendsTemplate({items: allFriendsArr});
                         addAllFriendsListeners();
                         allSearch.dispatchEvent(new Event('keyup'));
                     }
